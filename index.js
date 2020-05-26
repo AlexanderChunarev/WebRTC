@@ -22,10 +22,6 @@ getUserMedia(constraints, function (err, stream) {
         peer.signal(otherId)
     })
 
-    peer.on('data', function (data) {
-        document.getElementById('messages').textContent += data + '\n'
-    })
-
     peer.on('signal', function (data) {
         document.getElementById('yourId').value = JSON.stringify(data)
     })
