@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "getusermedia": "^2.0.1"
+    "getusermedia": "^2.0.1",
+    "socket.io": "^2.3.0"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "simple-peer": "^9.7.2"
   }
 }
