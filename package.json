@@ -1,0 +1,19 @@
+{
+  "name": "WebRtc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "budo index.js:bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "getusermedia": "^2.0.1"
+  },
+  "dependencies": {
+    "simple-peer": "^9.7.2"
+  }
+}
