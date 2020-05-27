@@ -6,17 +6,18 @@ const path = require('path');
 const port = 8080;
 
 app.get('/', function (request, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public/room.html'));
 });
 
 app.use('/scripts', express.static(__dirname + '/scripts'));
-app.use(express.static(__dirname + '/public'));
+
+app.use('/images', express.static(__dirname + '/images'));
 
 io.on('connection', function (socket) {
     socket.on('send_id', function (data) {
         socket.broadcast.emit('id', data);
     });
-})
+});
 
 http.listen(port, function () {
     console.log('server running on port ' + port)
