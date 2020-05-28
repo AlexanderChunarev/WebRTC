@@ -1,0 +1,32 @@
+html, body {
+    background: linear-gradient(to right, #42275a, #734b6d);
+}
+
+.edge_block {
+    width: 50%;
+    margin: 1%;
+    display: inline-block;
+    background: black;
+}
+
+.section-inline-block {
+    display: flex;
+    height: 100%;
+    margin:auto;
+
+}
+
+div video {
+    object-fit: cover;
+    width:100%;
+    height:100%;
+}
+
+.box {
+    position: absolute;
+    top: 15%;
+    margin-top: -10px;
+    margin-left: -10px;
+    width: 100%;
+    height: 50%;
+}

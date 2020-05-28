@@ -11022,6 +11022,24 @@ getUserMedia(constraints, function (err, stream) {
         stream: stream
     });
 
+    const peer1 = new Peer({
+        trickle: false,
+        stream: stream
+    });
+
+    const peer2 = new Peer({
+        trickle: false,
+        stream: stream
+    });
+
+    peer1.on('signal', function (data) {
+        socket.emit('send_id', JSON.stringify(data));
+    })
+
+    peer2.on('signal', function (data) {
+        socket.emit('send_id', JSON.stringify(data));
+    })
+
     socket.on('id', function (data) {
         peer.signal(JSON.parse(data))
     })
@@ -11031,10 +11049,8 @@ getUserMedia(constraints, function (err, stream) {
     })
 
     peer.on('stream', function (stream) {
-        const video = document.createElement('video');
-        document.body.appendChild(video)
-        video.srcObject = stream
-        video.play()
+        remoteVideo.srcObject = stream
+        remoteVideo.play()
     })
 })
 },{"getusermedia":10,"simple-peer":32}]},{},[44]);
