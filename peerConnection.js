@@ -1,44 +1,51 @@
-const getUserMedia = require('getusermedia');
 const Peer = require('simple-peer');
-const socket = io.connect('http://localhost:8080');
+const constraints = window.constraints = {
+    audio: true,
+    video: true
+};
 
-getUserMedia(constraints, function (err, stream) {
-    if (err) console.log(err);
 
-    const peer = new Peer({
-        initiator: location.hash === '#initiator',
+function applyConnection() {
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function success(stream) {
+            connection(stream)
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+}
+
+function connection(stream) {
+    const localPeer = new Peer({
+        initiator: true,
         trickle: false,
         stream: stream
     });
 
-    const peer1 = new Peer({
+    const remotePeer = new Peer({
         trickle: false,
         stream: stream
     });
 
-    const peer2 = new Peer({
-        trickle: false,
-        stream: stream
-    });
-
-    peer1.on('signal', function (data) {
-        socket.emit('send_id', JSON.stringify(data));
+    localPeer.on('signal', function (data) {
+        remotePeer.signal(data);
     })
 
-    peer2.on('signal', function (data) {
-        socket.emit('send_id', JSON.stringify(data));
+    remotePeer.on('signal', function (data) {
+        localPeer.signal(data);
     })
 
-    socket.on('id', function (data) {
-        peer.signal(JSON.parse(data))
-    })
+    // localPeer.on('stream', function (stream) {
+    //     console.log('starting connection local user ...')
+    //     localVideo.srcObject = stream;
+    //     localVideo.play();
+    // })
 
-    peer.on('signal', function (data) {
-        socket.emit('send_id', JSON.stringify(data));
+    remotePeer.on('stream', function (stream) {
+        console.log('starting connection remote user ...')
+        remoteVideo.srcObject = stream;
+        remoteVideo.play();
     })
+}
 
-    peer.on('stream', function (stream) {
-        remoteVideo.srcObject = stream
-        remoteVideo.play()
-    })
-})
+applyConnection()

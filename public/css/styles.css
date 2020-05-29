@@ -4,7 +4,7 @@ html, body {
 
 .edge_block {
     width: 50%;
-    margin: 1%;
+    margin: 5px;
     display: inline-block;
     background: black;
 }

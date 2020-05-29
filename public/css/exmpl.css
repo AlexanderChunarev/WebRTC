@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    background: #734b6d;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.video {
+    width: 100%;
+    background: black;
+}
+
+.container-video {
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+}
+
+.controls {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

@@ -20,8 +20,9 @@ app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/images', express.static(__dirname + '/images'));
 
 io.on('connection', function (socket) {
-    socket.on('send_id', function (data) {
-        socket.broadcast.emit('id', data);
+    socket.on('send_offer', function (data) {
+        console.log('Server data: ' + data)
+        socket.broadcast.emit('offer', data);
     });
 });
 
