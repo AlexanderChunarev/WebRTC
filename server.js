@@ -24,10 +24,14 @@ io.on('connection', function (socket) {
         console.log('Server data: ' + data)
         socket.broadcast.emit('offer', data);
     });
+
     socket.on('send_confirmed_offer', function (data) {
         socket.broadcast.emit('confirmed_offer', data);
     });
 
+    socket.on('send_id', function (data) {
+        socket.broadcast.emit('id', data);
+    });
 });
 
 http.listen(port, function () {

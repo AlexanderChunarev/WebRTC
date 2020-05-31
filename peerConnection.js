@@ -4,7 +4,6 @@ const constraints = window.constraints = {
     video: true
 };
 
-
 function applyConnection() {
     navigator.mediaDevices.getUserMedia(constraints)
         .then(function success(stream) {
@@ -16,36 +15,59 @@ function applyConnection() {
 }
 
 function connection(stream) {
-    const localPeer = new Peer({
-        initiator: true,
+    const peer = new Peer({
+        initiator: location.hash === '#init',
         trickle: false,
         stream: stream
     });
 
-    const remotePeer = new Peer({
-        trickle: false,
-        stream: stream
-    });
-
-    localPeer.on('signal', function (data) {
-        remotePeer.signal(data);
+    peer.on('signal', function (data) {
+        socket.emit('send_id', data);
     })
 
-    remotePeer.on('signal', function (data) {
-        localPeer.signal(data);
+    socket.on('id', function (data) {
+        peer.signal(data)
     })
 
-    // localPeer.on('stream', function (stream) {
-    //     console.log('starting connection local user ...')
-    //     localVideo.srcObject = stream;
-    //     localVideo.play();
-    // })
-
-    remotePeer.on('stream', function (stream) {
-        console.log('starting connection remote user ...')
-        remoteVideo.srcObject = stream;
-        remoteVideo.play();
+    peer.on('stream', function (stream) {
+        remoteVideo.srcObject = stream
+        remoteVideo.play()
     })
 }
+
+// function connection(stream) {
+//     const localPeer = new Peer({
+//         initiator: true,
+//         trickle: false,
+//         stream: stream
+//     });
+//
+//     const remotePeer = new Peer({
+//         trickle: false,
+//         stream: stream
+//     });
+//
+//     localPeer.on('signal', function (data) {
+//         console.log(data)
+//         remotePeer.signal(data);
+//     })
+//
+//     remotePeer.on('signal', function (data) {
+//         console.log(data)
+//         localPeer.signal(data);
+//     })
+//
+//     // localPeer.on('stream', function (stream) {
+//     //     console.log('starting connection local user ...')
+//     //     localVideo.srcObject = stream;
+//     //     localVideo.play();
+//     // })
+//
+//     remotePeer.on('stream', function (stream) {
+//         console.log('starting connection remote user ...')
+//         remoteVideo.srcObject = stream;
+//         remoteVideo.play();
+//     })
+// }
 
 applyConnection()

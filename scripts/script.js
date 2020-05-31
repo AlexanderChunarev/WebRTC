@@ -7,12 +7,12 @@ const socket = io.connect(BASE_URL);
 
 createRoom.addEventListener('click', () => {
     const url = BASE_URL + '/' + roomId.value;
-    // window.location.href = url;
     socket.emit('send_offer', url)
 })
 
 socket.on('offer', function (data) {
     const isConfirmed = window.confirm(data);
+    console.log(data)
     if (isConfirmed) {
         socket.emit('send_confirmed_offer', data)
         navigateTo(data)
@@ -20,7 +20,7 @@ socket.on('offer', function (data) {
 })
 
 socket.on('confirmed_offer', function (data) {
-    navigateTo(data)
+    navigateTo(data + '#init');
 })
 
 function navigateTo(url) {
