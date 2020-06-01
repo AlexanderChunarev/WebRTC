@@ -5,7 +5,11 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const path = require('path');
 const port = process.env.PORT || 8080;
-const dbClient = require('./db/connection');
+const dbClient = require('./db/databaseFactory');
+
+app.all('/', function(req, res) {
+    res.redirect('/login');
+});
 
 app.use(express.static('public'));
 
@@ -19,11 +23,15 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.get('/', function (request, res) {
+app.get('/login', function (request, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.get('/:id', function (request, res) {
+app.get('/account', function (request, res) {
+    res.sendFile(path.join(__dirname, 'public/account.html'));
+});
+
+app.get('/room/:id', function (request, res) {
     res.sendFile(path.join(__dirname, 'public/room.html'));
 });
 

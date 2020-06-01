@@ -19,7 +19,7 @@ function connect() {
 function insert(user, res) {
     database.collection('users', function (err, collection) {
         if (err) {
-            handleError(err, res);
+            return err;
         }
         collection.insert(user)
             .then(res.send(user))
