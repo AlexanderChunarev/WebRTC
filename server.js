@@ -1,9 +1,23 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const path = require('path');
-const port = process.env.PORT ||  8080;
+const port = process.env.PORT || 8080;
+const dbClient = require('./db/connection');
+
+app.use(express.static('public'));
+
+app.use('/scripts', express.static(__dirname + '/scripts'));
+
+app.use('/images', express.static(__dirname + '/images'));
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(bodyParser.json());
 
 app.get('/', function (request, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
@@ -13,15 +27,23 @@ app.get('/:id', function (request, res) {
     res.sendFile(path.join(__dirname, 'public/room.html'));
 });
 
-app.use(express.static('public'));
+app.get('/db/users', function (req, res) {
+    dbClient.getUsers(res);
+});
 
-app.use('/scripts', express.static(__dirname + '/scripts'));
+app.post('/db/users', function (req, res) {
+    const user = {
+        name: req.body.name
+    };
+    dbClient.insert(user, res);
+});
 
-app.use('/images', express.static(__dirname + '/images'));
+app.delete('/db/users/:id', function (req, res) {
+    dbClient.remove(req.params.id, res);
+});
 
 io.on('connection', function (socket) {
     socket.on('send_offer', function (data) {
-        console.log('Server data: ' + data)
         socket.broadcast.emit('offer', data);
     });
 
@@ -34,6 +56,11 @@ io.on('connection', function (socket) {
     });
 });
 
-http.listen(port, function () {
-    console.log('server running on port ' + port)
-});
+dbClient.connect().then(result => {
+    if (result) {
+        http.listen(port, function () {
+            console.log('Server running on port: ' + port)
+        });
+    }
+})
+

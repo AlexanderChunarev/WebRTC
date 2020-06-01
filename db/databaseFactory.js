@@ -1,0 +1,56 @@
+const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
+const url = "mongodb://localhost:27017/users_db";
+let database;
+
+function connect() {
+    return new Promise((resolve) => {
+        MongoClient.connect(url)
+            .then(db => {
+                database = db;
+                resolve(true);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    });
+}
+
+function insert(user, res) {
+    database.collection('users', function (err, collection) {
+        if (err) {
+            handleError(err, res);
+        }
+        collection.insert(user)
+            .then(res.send(user))
+            .catch(res.sendStatus(500));
+    });
+}
+
+function getUsers(res) {
+    database.collection('users').find().toArray()
+        .then(docs => res.send(docs))
+        .catch(err => handleError(err, res));
+}
+
+function remove(id, res) {
+    database.collection('users').deleteOne({_id: toObjectId(id)})
+        .then(() => res.sendStatus(200))
+        .catch(() => res.sendStatus(500));
+}
+
+function handleError(err, res) {
+    return res.sendStatus(500);
+}
+
+function toObjectId(id) {
+    return ObjectID(id);
+}
+
+module.exports.connect = connect
+
+module.exports.insert = insert
+
+module.exports.getUsers = getUsers
+
+module.exports.remove = remove
