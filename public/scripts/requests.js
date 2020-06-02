@@ -1,17 +1,16 @@
-let accountUrl;
 const API_URL = window.location.origin + '/db/users';
 
-function generateUrl(parameter, value) {
-    accountUrl = new URL(window.location.origin + '/account/');
-    let search_url = accountUrl.searchParams;
-    accountUrl.search = search_url.toString()
+function generateUrl(tag,parameter, value) {
+    let url = new URL(window.location.origin + '/' + tag + '/');
+    let search_url = url.searchParams;
+    url.search = search_url.toString()
     search_url.set(parameter, value);
-    return accountUrl;
+    return url;
 }
 
 function getParameter(parameter) {
-    accountUrl = new URL(window.location.href);
-    return accountUrl.searchParams.get(parameter).toString();
+    let url = new URL(window.location.href);
+    return url.searchParams.get(parameter).toString();
 }
 
 function deleteUser(url = '', id) {
@@ -21,13 +20,7 @@ function deleteUser(url = '', id) {
             'Content-Type': 'application/json'
         }
     });
-    return response.then(response => {
-        if (response.ok) {
-            return Promise.resolve('User deleted');
-        } else {
-            return Promise.reject('An error occurred')
-        }
-    });
+    return setResponse(response, 'User deleted')
 }
 
 function postData(url = '', data = {}) {
@@ -43,11 +36,25 @@ function postData(url = '', data = {}) {
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     });
-    return response.then(response =>
-        response.json().then(json => {
-            console.log(json);
-            return json;
-        }));
+    return setResponse(response, response.then(res => {
+        return res.json();
+    }));
+
+}
+
+function fetchUsers(url = '') {
+    return fetch(url)
+        .then(res => res.json());
+}
+
+function setResponse(response, onSuccess = '', onError = 'An error occurred') {
+    return response.then(response => {
+        if (response.ok) {
+            return Promise.resolve(onSuccess);
+        } else {
+            return Promise.reject(onError)
+        }
+    });
 }
 
 function navigateTo(url) {

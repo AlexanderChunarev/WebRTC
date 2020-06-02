@@ -4,22 +4,16 @@
     <meta charset="UTF-8">
     <title>RTC</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
+    <link rel="stylesheet" href="/css/accountStyles.css">
 </head>
 <body>
-<h5 class="card-header bg-primary text-white text-center py-4">
-    <strong>Create room</strong>
-</h5>
-<div class="d-flex justify-content-center">
-    <div class="input-group w-25 p-3 justify-content-center ">
-        <input id="roomIdInput" type="text" class="form-control" placeholder="Enter room id ..."
-               aria-label="Recipient's username"
-               aria-describedby="basic-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-outline-success" type="button" id="create">Create</button>
-        </div>
-    </div>
-</div>
+<button id="refresh">Refresh</button>
+<section class="section-inline-block">
+    <div class="center_block"></div>
+    <div class="edge_block bg-primary" id="container"></div>
+</section>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/scripts/User.js"></script>
 <script src="/scripts/requests.js"></script>
 <script src="/scripts/accountScript.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"/>

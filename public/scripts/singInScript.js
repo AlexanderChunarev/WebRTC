@@ -5,7 +5,7 @@ singInForm.addEventListener('submit', ev => {
     ev.preventDefault();
     postData(API_URL, {name: inputNickname.value})
         .then((data) => {
-            navigateTo(generateUrl('u', data._id) + '');
+            navigateTo(generateUrl('account', 'u', data._id) + '');
             console.log(data)
         })
         .catch(err => {
