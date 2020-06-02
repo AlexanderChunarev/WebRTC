@@ -1,39 +1,37 @@
-const accountUrl = new URL(window.location.origin + '/account/');
+let accountUrl;
 const API_URL = window.location.origin + '/db/users';
-const inputNickname = document.getElementById('inputNickname');
-const singInForm = document.getElementById('singInForm');
-
-singInForm.addEventListener('submit', ev => {
-    ev.preventDefault();
-    postData(API_URL, {name: inputNickname.value})
-        .then((data) => {
-            navigateTo(generateUrl('u', data._id) + '');
-            console.log(data)
-        })
-        .catch(err => {
-            console.log(err);
-        })
-})
 
 function generateUrl(parameter, value) {
+    accountUrl = new URL(window.location.origin + '/account/');
     let search_url = accountUrl.searchParams;
     accountUrl.search = search_url.toString()
     search_url.set(parameter, value);
-    return accountUrl.toString();
+    return accountUrl;
 }
 
 function getParameter(parameter) {
+    accountUrl = new URL(window.location.href);
     return accountUrl.searchParams.get(parameter).toString();
 }
 
-async function deleteUser(url = '', id) {
-    return await fetch(url + '/' + id, {
+function deleteUser(url = '', id) {
+    const response = fetch(url + '/' + id, {
         method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.then(response => {
+        if (response.ok) {
+            return Promise.resolve('User deleted');
+        } else {
+            return Promise.reject('An error occurred')
+        }
     });
 }
 
-async function postData(url = '', data = {}) {
-    const response = await fetch(url, {
+function postData(url = '', data = {}) {
+    const response = fetch(url, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -45,7 +43,11 @@ async function postData(url = '', data = {}) {
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     });
-    return await response.json();
+    return response.then(response =>
+        response.json().then(json => {
+            console.log(json);
+            return json;
+        }));
 }
 
 function navigateTo(url) {
