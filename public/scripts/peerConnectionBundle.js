@@ -8134,11 +8134,11 @@ function connection(stream) {
     });
 
     peer.on('signal', function (data) {
-        socket.emit('send_id', data);
+        socket.emit('send_id', {peerID: data, roomID: getParameter('id')});
     })
 
     socket.on('id', function (data) {
-        console.log(data)
+        console.log('id: ' + data)
         peer.signal(data)
     })
 
@@ -8148,40 +8148,11 @@ function connection(stream) {
     })
 }
 
-// function connection(stream) {
-//     const localPeer = new Peer({
-//         initiator: true,
-//         trickle: false,
-//         stream: stream
-//     });
-//
-//     const remotePeer = new Peer({
-//         trickle: false,
-//         stream: stream
-//     });
-//
-//     localPeer.on('signal', function (data) {
-//         console.log(data)
-//         remotePeer.signal(data);
-//     })
-//
-//     remotePeer.on('signal', function (data) {
-//         console.log(data)
-//         localPeer.signal(data);
-//     })
-//
-//     // localPeer.on('stream', function (stream) {
-//     //     console.log('starting connection local user ...')
-//     //     localVideo.srcObject = stream;
-//     //     localVideo.play();
-//     // })
-//
-//     remotePeer.on('stream', function (stream) {
-//         console.log('starting connection remote user ...')
-//         remoteVideo.srcObject = stream;
-//         remoteVideo.play();
-//     })
-// }
+socket.on('connected_to_room', function (data) {
+    console.log(data)
+})
+
+socket.emit('room', getParameter('id'));
 
 applyConnection()
 
