@@ -4,9 +4,8 @@ const singInForm = document.getElementById('singInForm');
 singInForm.addEventListener('submit', ev => {
     ev.preventDefault();
     postData(API_URL, {name: inputNickname.value})
-        .then((data) => {
-            navigateTo(generateUrl('account', 'u', data._id) + '');
-            console.log(data)
+        .then((user) => {
+            navigateTo(generateUrl('account', 'u', user._id) + '');
         })
         .catch(err => {
             console.log(err);
