@@ -1,6 +1,7 @@
 const API_URL = window.location.origin + '/db/users';
+const USER_DELETED_MESSAGE = 'user-deleted'
 
-function generateUrl(tag,parameter, value) {
+function generateUrl(tag, parameter, value) {
     let url = new URL(window.location.origin + '/' + tag + '/');
     let search_url = url.searchParams;
     url.search = search_url.toString()
@@ -16,11 +17,12 @@ function getParameter(parameter) {
 function deleteUser(url = '', id) {
     const response = fetch(url + '/' + id, {
         method: 'DELETE',
+        keepalive: true,
         headers: {
             'Content-Type': 'application/json'
         }
     });
-    return setResponse(response, 'User deleted')
+    return setResponse(response, USER_DELETED_MESSAGE)
 }
 
 function postData(url = '', data = {}) {
@@ -43,8 +45,12 @@ function postData(url = '', data = {}) {
 }
 
 function fetchUsers(url = '') {
-    return fetch(url)
-        .then(res => res.json());
+    return fetch(url, {
+        method: 'GET', // 'GET', 'PUT', 'DELETE', etc.
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => response.json())
 }
 
 function setResponse(response, onSuccess = '', onError = 'An error occurred') {

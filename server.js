@@ -50,8 +50,15 @@ app.delete('/db/users/:id', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-    socket.on('set_user', function (userID) {
-        users.push({id: userID, socketID: socket.id})
+
+    socket.on('on-user-added', function (user) {
+        users.push({id: user._id, socketID: socket.id});
+        socket.broadcast.emit('add-active-user', user);
+    })
+
+    socket.on('on-user-remove', function (userID) {
+        console.log('on remove ')
+        socket.broadcast.emit('remove-user', userID);
     })
 
     socket.on('send_offer', function (data) {
