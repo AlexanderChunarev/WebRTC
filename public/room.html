@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>RTC</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-
-<div class="box">
-    <section class="section-inline-block">
-        <div class="edge_block">
+<div class="media-container">
+    <div class="center_block">
+        <video id="remoteVideo"></video>
+        <div class="top-corner">
             <video id="localVideo"></video>
         </div>
-        <div class="edge_block">
-            <video id="remoteVideo"></video>
-        </div>
-    </section>
+        </video>
+    </div><!--
+    --><div class="bottom-panel">
+</div>
+</div><!--
+--><div class="edge_block">
+
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/requests.js"></script>
 <script src="/scripts/roomScript.js"></script>
 <script src="/scripts/peerConnectionBundle.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
