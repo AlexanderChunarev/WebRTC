@@ -1,11 +1,11 @@
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
-const url = "mongodb://localhost:27017/users_db";
+const config = require('../config/config.json');
 let database;
 
 function connect() {
     return new Promise((resolve) => {
-        MongoClient.connect(url)
+        MongoClient.connect(config.MongoDB.connectionUrl)
             .then(db => {
                 database = db;
                 resolve(true);
