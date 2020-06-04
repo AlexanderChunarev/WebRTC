@@ -1,11 +1,12 @@
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
-const config = require('../config/config.json');
+// const config = require('../config/config.json');
+require('dotenv').config();
 let database;
 
 function connect() {
     return new Promise((resolve) => {
-        MongoClient.connect(config.MongoDB.connectionUrl)
+        MongoClient.connect(process.env.MONGODB_CONNECTION_URL)
             .then(db => {
                 database = db;
                 resolve(true);
