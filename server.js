@@ -35,12 +35,22 @@ app.get('/room', function (request, res) {
 });
 
 app.get('/db/users', function (req, res) {
-    dbClient.getUsers(res);
+    dbClient.getActiveUsers(res);
+});
+
+app.post('/db/users/select', function (req, res) {
+    dbClient.getUser(req.body, res);
+});
+
+app.post('/db/users/update/status', function (req, res) {
+    dbClient.setStatus(req.body, res);
 });
 
 app.post('/db/users', function (req, res) {
     const user = {
-        name: req.body.name
+        name: req.body.name,
+        password: req.body.password,
+        isActive: false
     };
     dbClient.insert(user, res);
 });
@@ -50,14 +60,15 @@ app.delete('/db/users/:id', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-
     socket.on('on-user-added', function (user) {
-        users.push({id: user._id, socketID: socket.id});
+        if (users.find(obj => obj.id === user._id) === undefined) {
+            users.push({id: user._id, socketID: socket.id});
+        }
+        console.log(users.length);
         socket.broadcast.emit('add-active-user', user);
     })
 
     socket.on('on-user-remove', function (userID) {
-        console.log('on remove ')
         socket.broadcast.emit('remove-user', userID);
     })
 
@@ -72,7 +83,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('room', function (room) {
-        console.log(room)
         socket.join(room);
         socket.to(room).emit('connected_to_room', 'Connected')
     });

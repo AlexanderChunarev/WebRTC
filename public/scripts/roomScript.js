@@ -7,13 +7,13 @@ const constraints = window.constraints = {
     video: true
 };
 
+window.onpopstate = function(event) {
+
+};
+
 function navigateTo(url) {
     window.location.href = url;
 }
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     socket.emit('send_offer', BASE_URL)
-// });
 
 async function initStream() {
     return await navigator.mediaDevices.getUserMedia(constraints);

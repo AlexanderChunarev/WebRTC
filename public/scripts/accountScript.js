@@ -4,26 +4,25 @@ const listContainer = document.getElementById('container');
 let currentUser;
 let users = [];
 
-window.addEventListener("unload", function () {
+window.onbeforeunload = () => {
     socket.emit('on-user-remove', currentUser._id);
-    deleteUser(API_URL, currentUser._id)
-        .then(res => {
-            console.log(res);
-        });
-});
-
-function setCurrentUser(res) {
-    const uID = getParameter('u');
-    currentUser = res.find(user => user._id === uID);
-    socket.emit('on-user-added', currentUser);
+    setActivityStatus(currentUser);
 }
 
-fetchUsers(API_URL)
-    .then(res => {
-        setCurrentUser(res);
-        users = res.filter(user => user._id !== currentUser._id)
-        show(users);
-    });
+function init() {
+    const uID = getParameter('u');
+    postData(API_SELECT_URL, {_id: uID})
+        .then(res => {
+            currentUser = res[0];
+            setActivityStatus(currentUser)
+            socket.emit('on-user-added', currentUser);
+        });
+    getData(API_URL)
+        .then(res => {
+            users = res.filter(user => user._id !== uID)
+            show(users);
+        });
+}
 
 socket.on('offer', function (data) {
     const isConfirmed = window.confirm(data);
@@ -65,11 +64,4 @@ function show(users) {
     }
 }
 
-// document.getElementById('refresh').addEventListener('click', ev => {
-//     listContainer.innerHTML = '';
-//     fetchUsers(API_URL).then(res => {
-//         res.filter(user => user._id !== uID).forEach(user => {
-//             addUser(user)
-//         })
-//     });
-// });
+init()
