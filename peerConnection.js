@@ -31,6 +31,7 @@ function connection(stream) {
     })
 
     peer.on('stream', function (stream) {
+        console.log(stream)
         remoteVideo.srcObject = stream
         remoteVideo.play()
     })

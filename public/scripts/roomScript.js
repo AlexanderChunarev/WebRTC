@@ -3,7 +3,7 @@ const remoteVideo = document.getElementById('remoteVideo');
 const BASE_URL = window.location.origin;
 const socket = io.connect(BASE_URL);
 const constraints = window.constraints = {
-    audio: true,
+    audio: false,
     video: true
 };
 
