@@ -25,6 +25,7 @@ function init() {
 }
 
 socket.on('offer', function (data) {
+    console.log("offer")
     const isConfirmed = window.confirm(data);
     if (isConfirmed) {
         const roomUrl = generateUrl('room', 'id', new Date().getTime());
@@ -52,6 +53,7 @@ function addUser(user) {
     el.innerHTML = itemHtml;
     el.getElementsByTagName('p')[0].innerHTML = user.name;
     el.getElementsByTagName('button')[0].addEventListener('click', () => {
+        console.log("send offer")
         socket.emit('send_offer', {senderID: currentUser._id, remoteID: user._id});
     })
     listContainer.appendChild(el);
