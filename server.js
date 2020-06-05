@@ -61,19 +61,20 @@ app.delete('/db/users/:id', function (req, res) {
 
 io.on('connection', function (socket) {
     socket.on('on-user-added', function (user) {
-        if (users.find(obj => obj.id === user._id) === undefined) {
-            users.push({id: user._id, socketID: socket.id});
-        }
+        users.push({id: user._id, socketID: socket.id});
         console.log(users.length);
         socket.broadcast.emit('add-active-user', user);
     })
 
     socket.on('on-user-remove', function (userID) {
+        users.splice(users.findIndex((user) => user.id === userID), 1)
+        console.log(users.length);
         socket.broadcast.emit('remove-user', userID);
     })
 
     socket.on('send_offer', function (data) {
         const socketID = users.find(user => user.id === data.remoteID).socketID
+        console.log(socketID)
         socket.broadcast.to(socketID).emit('offer', data);
     });
 
