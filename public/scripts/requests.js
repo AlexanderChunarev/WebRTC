@@ -1,4 +1,6 @@
-const API_URL = window.location.origin + '/db/users';
+const API_URL = window.location.origin + '/db/users/';
+const API_STATUS_URL = API_URL + 'update/status';
+const API_SELECT_URL = API_URL + 'select'
 const USER_DELETED_MESSAGE = 'user-deleted'
 
 function generateUrl(tag, parameter, value) {
@@ -44,9 +46,9 @@ function postData(url = '', data = {}) {
 
 }
 
-function fetchUsers(url = '') {
+function getData(url = '') {
     return fetch(url, {
-        method: 'GET', // 'GET', 'PUT', 'DELETE', etc.
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -65,5 +67,12 @@ function setResponse(response, onSuccess = '', onError = 'An error occurred') {
 
 function navigateTo(url) {
     window.location.href = url;
+}
+
+function setActivityStatus(user) {
+    user.isActive = !user.isActive;
+    postData(API_STATUS_URL, user).then(res => {
+        console.log(JSON.stringify(res));
+    })
 }
 

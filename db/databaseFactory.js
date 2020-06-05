@@ -18,20 +18,39 @@ function connect() {
 }
 
 function insert(user, res) {
-    database.collection('users', function (err, collection) {
-        if (err) {
-            return err;
-        }
-        collection.insert(user)
-            .then(res.send(user))
-            .catch(res.sendStatus(500));
-    });
+    database.collection('users').insertOne(user)
+        .then(res.send(user))
+        .catch(err => handleError(err, res));
 }
 
-function getUsers(res) {
-    database.collection('users').find().toArray()
+function getActiveUsers(res) {
+    database.collection('users').find({isActive: true}).toArray()
         .then(docs => res.send(docs))
         .catch(err => handleError(err, res));
+}
+
+function getUser(user, res) {
+    let query;
+    if (user.name !== undefined) {
+        query = {name: user.name};
+    } else if (user._id !== undefined) {
+        query = {_id: ObjectID(user._id)}
+    }
+    database.collection('users').find(query).toArray()
+        .then(docs => res.send(docs))
+        .catch(err => handleError(err, res));
+}
+
+function setStatus(user, res) {
+    database.collection('users').updateOne(
+        {_id: ObjectID(user._id)},
+        {$set: {isActive: user.isActive}})
+        .then(res.send(user))
+        .catch(
+            err => {
+                handleError(err, res)
+            }
+        );
 }
 
 function remove(id, res) {
@@ -52,6 +71,10 @@ module.exports.connect = connect
 
 module.exports.insert = insert
 
-module.exports.getUsers = getUsers
+module.exports.getActiveUsers = getActiveUsers
+
+module.exports.getUser = getUser
+
+module.exports.setStatus = setStatus
 
 module.exports.remove = remove
