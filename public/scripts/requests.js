@@ -1,7 +1,6 @@
 const API_URL = window.location.origin + '/db/users/';
 const API_STATUS_URL = API_URL + 'update/status';
 const API_SELECT_URL = API_URL + 'select'
-const USER_DELETED_MESSAGE = 'user-deleted'
 
 function generateUrl(tag, parameter, value) {
     let url = new URL(window.location.origin + '/' + tag + '/');
@@ -14,17 +13,6 @@ function generateUrl(tag, parameter, value) {
 function getParameter(parameter) {
     let url = new URL(window.location.href);
     return url.searchParams.get(parameter).toString();
-}
-
-function deleteUser(url = '', id) {
-    const response = fetch(url + '/' + id, {
-        method: 'DELETE',
-        keepalive: true,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return setResponse(response, USER_DELETED_MESSAGE)
 }
 
 function postData(url = '', data = {}) {
@@ -43,7 +31,6 @@ function postData(url = '', data = {}) {
     return setResponse(response, response.then(res => {
         return res.json();
     }));
-
 }
 
 function getData(url = '') {
@@ -66,13 +53,11 @@ function setResponse(response, onSuccess = '', onError = 'An error occurred') {
 }
 
 function navigateTo(url) {
-    window.location.href = url;
+    window.location = url;
 }
 
 function setActivityStatus(user) {
     user.isActive = !user.isActive;
-    postData(API_STATUS_URL, user).then(res => {
-        console.log(JSON.stringify(res));
-    })
+    postData(API_STATUS_URL, user)
 }
 

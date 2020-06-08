@@ -5,20 +5,40 @@
     <title>RTC</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
     <link rel="stylesheet" href="/css/accountStyles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Request</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer">
+                    <button id="confirmOffer" type="button" class="btn btn-success" data-dismiss="modal">Confirm
+                    </button>
+                    <button id="dismissOffer" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <section class="section-inline-block">
     <div class="center_block">
-        <button id="load">Click</button>
     </div>
     <div class="edge_block bg-primary" id="container"></div>
 </section>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/item.js"></script>
 <script src="/scripts/requests.js"></script>
 <script src="/scripts/accountScript.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </body>
 </html>

@@ -24,14 +24,14 @@ function init() {
         });
 }
 
-socket.on('offer', function (data) {
-    console.log("offer")
-    const isConfirmed = window.confirm(data);
-    if (isConfirmed) {
+socket.on('offer', function (user) {
+    $('#myModal').modal('show');
+    document.getElementById('modalBody').innerHTML = `${user.name} wants to call you`
+    document.getElementById('confirmOffer').addEventListener('click', () => {
         const roomUrl = generateUrl('room', 'id', new Date().getTime());
-        socket.emit('send_confirmed_offer', {senderID: data.senderID, url: roomUrl.href})
+        socket.emit('send_confirmed_offer', {senderID: user.senderID, url: roomUrl.href})
         navigateTo(roomUrl)
-    }
+    })
 })
 
 socket.on('confirmed_offer', function (data) {
@@ -53,8 +53,7 @@ function addUser(user) {
     el.innerHTML = itemHtml;
     el.getElementsByTagName('p')[0].innerHTML = user.name;
     el.getElementsByTagName('button')[0].addEventListener('click', () => {
-        console.log("send offer")
-        socket.emit('send_offer', {senderID: currentUser._id, remoteID: user._id});
+        socket.emit('send_offer', {name: currentUser.name, senderID: currentUser._id, remoteID: user._id});
     })
     listContainer.appendChild(el);
 }

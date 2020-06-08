@@ -7,16 +7,8 @@ const constraints = window.constraints = {
     video: true
 };
 
-window.onpopstate = function(event) {
-
-};
-
-function navigateTo(url) {
-    window.location.href = url;
-}
-
-async function initStream() {
-    return await navigator.mediaDevices.getUserMedia(constraints);
+function initStream() {
+    return navigator.mediaDevices.getUserMedia(constraints);
 }
 
 function handleSuccess(stream) {
