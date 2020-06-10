@@ -8115,6 +8115,9 @@ const constraints = window.constraints = {
     audio: true,
     video: true
 };
+const chatBlock = document.getElementById('chat');
+const sendMessage = document.getElementById('send-message');
+const messageInput = document.getElementById('message-text');
 
 function applyConnection() {
     navigator.mediaDevices.getUserMedia(constraints)
@@ -8133,23 +8136,45 @@ function connection(stream) {
         stream: stream
     });
 
-    peer.on('signal', function (data) {
+    peer.on('signal', data => {
         socket.emit('send_id', {peerID: data, roomID: getParameter('id')});
-    })
+    });
 
     socket.on('id', function (data) {
-        console.log('id: ' + data)
         peer.signal(data)
-    })
+    });
 
-    peer.on('stream', function (stream) {
-        console.log(stream)
+    peer.on('stream', stream => {
         remoteVideo.srcObject = stream
         remoteVideo.play()
+    });
+
+    peer.on('data', data => {
+        appendMessageHtml(data, 'candidate-chat-message');
+    });
+
+    sendMessage.addEventListener('click', () => {
+        appendMessageHtml(messageInput.value, 'my-chat-message')
+        peer.send(messageInput.value);
+        messageInput.value = '';
+    });
+
+    messageInput.addEventListener("keyup", e => {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            sendMessage.click();
+        }
     })
 }
 
-socket.on('connected_to_room', function (data) {
+function appendMessageHtml(message, className = '') {
+    let element = document.createElement('div');
+    element.className = className;
+    element.innerHTML = message;
+    chatBlock.appendChild(element);
+}
+
+socket.on('connected_to_room', data => {
     console.log(data)
 })
 

@@ -1,6 +1,7 @@
 const BASE_URL = window.location.origin;
 const socket = io.connect(BASE_URL);
 const listContainer = document.getElementById('container');
+const localVideo = document.getElementById('prepareLocalVideo');
 let currentUser;
 let users = [];
 

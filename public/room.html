@@ -11,20 +11,37 @@
     <div class="center_block">
         <video id="remoteVideo"></video>
         <div class="top-corner">
-            <video id="localVideo"></video>
+            <video id="localVideo" muted="muted"></video>
         </div>
-        </video>
-    </div><!--
-    --><div class="bottom-panel">
-</div>
-</div><!--
---><div class="edge_block">
 
+    <div class="menu-container">
+        <div id="turn_on_of_video" class="custom-button" role="button">
+            <img id="turn_on_of_video_img" class="image-button" src="/images/video-conference.png" alt="turn.on.video">
+        </div>
+        <div id="turn_on_of_audio" class="custom-button" role="button">
+            <img id="turn_on_of_audio_img" class="image-button" src="/images/mic.png" alt="turn.on.audio">
+        </div>
+    </div>
+</div>
+</div>
+<div class="edge_block">
+    <div id="chat" class="chat-block"></div>
+
+    <div class="input-block">
+        <div class="input-group mb-3" >
+            <input id="message-text" type="text" class="form-control" placeholder="Search">
+            <div class="input-group-append">
+                <button id="send-message" class="btn btn-success" type="button">Send</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/requests.js"></script>
+<script src="/scripts/item.js"></script>
 <script src="/scripts/roomScript.js"></script>
+<script src="/scripts/prepareMedia.js"></script>
 <script src="/scripts/peerConnectionBundle.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

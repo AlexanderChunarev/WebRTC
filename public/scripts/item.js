@@ -9,3 +9,6 @@ const itemHtml = `
             </div>
         </div>
     </div>`
+
+const myChatMessageHtml = `<div class="my-chat-message"></div>`
+const opponentChatMessageHtml = `<div class="candidate-chat-message"></div>`

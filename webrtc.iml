@@ -7,5 +7,6 @@
     <orderEntry type="library" name="popper.js" level="application" />
     <orderEntry type="library" name="@types/express" level="application" />
     <orderEntry type="library" name="@types/socket.io" level="application" />
+    <orderEntry type="library" name="@types/simple-peer" level="application" />
   </component>
 </module>

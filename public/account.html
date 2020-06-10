@@ -31,12 +31,24 @@
 </div>
 <section class="section-inline-block">
     <div class="center_block">
+        <div class="video-container">
+            <video id="prepareLocalVideo" muted="muted"></video>
+        </div>
+        <div class="menu-container">
+            <div id="turn_on_of_video" class="custom-button" role="button">
+                <img id="turn_on_of_video_img" class="image-button" src="/images/video-conference.png" alt="turn.on.video">
+            </div>
+            <div id="turn_on_of_audio" class="custom-button" role="button">
+                <img id="turn_on_of_audio_img" class="image-button" src="/images/mic.png" alt="turn.on.audio">
+            </div>
+        </div>
     </div>
     <div class="edge_block bg-primary" id="container"></div>
 </section>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/scripts/item.js"></script>
+<script src="/scripts/prepareMedia.js"></script>
 <script src="/scripts/requests.js"></script>
 <script src="/scripts/accountScript.js"></script>
 
