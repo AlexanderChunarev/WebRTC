@@ -17,6 +17,7 @@ h1, h2, p {
 
 .top-corner {
     position:absolute;
+    margin: 10px;
     width: 15%;
     height: 15%;
     top: 0;

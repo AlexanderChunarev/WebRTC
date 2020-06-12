@@ -4,10 +4,15 @@ const listContainer = document.getElementById('container');
 const localVideo = document.getElementById('prepareLocalVideo');
 let currentUser;
 let users = [];
+let options = {
+    video: true,
+    audio: true
+}
 
 window.onbeforeunload = () => {
     socket.emit('on-user-remove', currentUser._id);
     setActivityStatus(currentUser);
+    sessionStorage.setItem('local_options', JSON.stringify(options));
 }
 
 function init() {
@@ -31,12 +36,12 @@ socket.on('offer', function (user) {
     document.getElementById('confirmOffer').addEventListener('click', () => {
         const roomUrl = generateUrl('room', 'id', new Date().getTime());
         socket.emit('send_confirmed_offer', {senderID: user.senderID, url: roomUrl.href})
-        navigateTo(roomUrl)
+        navigateTo(roomUrl);
     })
 })
 
-socket.on('confirmed_offer', function (data) {
-    navigateTo(data + '#init');
+socket.on('confirmed_offer', function (url) {
+    navigateTo(url + '#init');
 })
 
 socket.on('add-active-user', function (user) {
@@ -48,6 +53,32 @@ socket.on('remove-user', function (userID) {
     users = users.filter(user => user._id !== userID);
     show(users);
 })
+
+turnOnOfVideo.onclick = function () {
+    update(turnOnOfVideoImage, {
+        tagFrom: TURN_ON_VIDEO,
+        tagTo: TURN_OF_VIDEO,
+        imagePathFrom: '/images/no-video-conference.png',
+        imagePathTo: '/images/video-conference.png'
+    });
+
+    let videoStream = localStream.getTracks().find(mediaStreamTrack => mediaStreamTrack.kind === 'video');
+    videoStream.enabled = !videoStream.enabled;
+    options.video = videoStream.enabled;
+}
+
+turnOnOfAudio.onclick = function () {
+    update(turnOnOfAudioImage, {
+        tagFrom: TURN_ON_AUDIO,
+        tagTo: TURN_OF_AUDIO,
+        imagePathFrom: '/images/rsz_mute_1.png',
+        imagePathTo: '/images/mic.png'
+    });
+
+    let audioStream = localStream.getTracks().find(mediaStreamTrack => mediaStreamTrack.kind === 'audio');
+    audioStream.enabled = !audioStream.enabled;
+    options.audio = audioStream.enabled;
+}
 
 function addUser(user) {
     let el = document.createElement('div');

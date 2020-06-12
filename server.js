@@ -88,6 +88,10 @@ io.on('connection', function (socket) {
     socket.on('send_id', function (data) {
         socket.to(data.roomID).broadcast.emit('id', data.peerID);
     });
+
+    socket.on('media', function (data) {
+        socket.to(data.roomID).broadcast.emit('media-constraints', data.options);
+    });
 });
 
 dbClient.connect().then(result => {

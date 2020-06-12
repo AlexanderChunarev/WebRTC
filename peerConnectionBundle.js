@@ -8154,10 +8154,10 @@ function connection(stream) {
         const localOptions = sessionStorage.getItem('local_options');
         if (localOptions !== null) {
             const options = JSON.parse(localOptions);
-            if (options.video === false) {
+            if (!options.video) {
                 turnOnOfVideo.click()
             }
-            if (options.audio === false) {
+            if (!options.audio) {
                 turnOnOfAudio.click()
             }
         }

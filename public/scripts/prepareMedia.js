@@ -12,36 +12,14 @@ let constraints = window.constraints = {
 };
 let localStream;
 
-turnOnOfVideo.onclick = function () {
-    if (turnOnOfVideoImage.alt === TURN_ON_VIDEO) {
-        turnOnOfVideoImage.src = '/images/no-video-conference.png';
-        turnOnOfVideoImage.alt = TURN_OF_VIDEO;
-    } else if (turnOnOfVideoImage.alt === TURN_OF_VIDEO) {
-        turnOnOfVideoImage.src = '/images/video-conference.png';
-        turnOnOfVideoImage.alt = TURN_ON_VIDEO;
+function update(element, options) {
+    if (element.alt === options.tagFrom) {
+        element.src = options.imagePathFrom;
+        element.alt = options.tagTo;
+    } else if (element.alt === options.tagTo) {
+        element.src = options.imagePathTo;
+        element.alt = options.tagFrom;
     }
-
-    localStream.getTracks().forEach((mediaStreamTrack) => {
-        if (mediaStreamTrack.kind === 'video') {
-            mediaStreamTrack.enabled = !mediaStreamTrack.enabled;
-        }
-    });
-}
-
-turnOnOfAudio.onclick = function () {
-    if (turnOnOfAudioImage.alt === TURN_ON_AUDIO) {
-        turnOnOfAudioImage.src = '/images/rsz_mute_1.png';
-        turnOnOfAudioImage.alt = TURN_OF_AUDIO;
-    } else if (turnOnOfAudioImage.alt === TURN_OF_AUDIO) {
-        turnOnOfAudioImage.src = '/images/mic.png';
-        turnOnOfAudioImage.alt = TURN_ON_AUDIO;
-    }
-
-    localStream.getTracks().forEach((mediaStreamTrack) => {
-        if (mediaStreamTrack.kind === 'audio') {
-            mediaStreamTrack.enabled = !mediaStreamTrack.enabled;
-        }
-    });
 }
 
 function initStream() {
