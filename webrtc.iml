@@ -8,5 +8,6 @@
     <orderEntry type="library" name="@types/express" level="application" />
     <orderEntry type="library" name="@types/socket.io" level="application" />
     <orderEntry type="library" name="@types/simple-peer" level="application" />
+    <orderEntry type="library" name="@types/mongodb" level="application" />
   </component>
 </module>
