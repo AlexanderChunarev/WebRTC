@@ -80,6 +80,11 @@ io.on('connection', function (socket) {
         socket.broadcast.to(socketID).emit('confirmed_offer', data.url);
     });
 
+    socket.on('send_rejected_offer', function (data) {
+        const socketID = users.find(user => user.id === data.senderID).socketID;
+        socket.broadcast.to(socketID).emit('rejected_offer', data.name);
+    });
+
     socket.on('room', function (room) {
         socket.join(room);
         socket.to(room).emit('connected_to_room', 'Connected')
@@ -90,6 +95,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('media', function (data) {
+        console.log("media");
         socket.to(data.roomID).broadcast.emit('media-constraints', data.options);
     });
 });

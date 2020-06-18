@@ -8,6 +8,7 @@ const sendMessage = document.getElementById('send-message');
 const messageInput = document.getElementById('message-text');
 const roomID = getParameter('id');
 let remoteStream;
+let mediaConstraints = {};
 
 function applyConnection() {
     navigator.mediaDevices.getUserMedia(constraints)
@@ -19,16 +20,31 @@ function applyConnection() {
         })
 }
 
-function applyOptions() {
+function applyLocalOptions() {
     const localOptions = sessionStorage.getItem('local_options');
     if (localOptions !== null) {
         const options = JSON.parse(localOptions);
         if (!options.video) {
+            console.log('video')
             turnOnOfVideo.click()
         }
         if (!options.audio) {
+            console.log('audio')
             turnOnOfAudio.click()
         }
+    }
+}
+
+function applyRemoteOptions(stream, mediaConstraints) {
+    if (mediaConstraints !== undefined && stream !== undefined) {
+        stream.getTracks().forEach((mediaStreamTrack) => {
+            if (mediaStreamTrack.kind === 'video' && mediaConstraints.video !== undefined) {
+                mediaStreamTrack.enabled = mediaConstraints.video;
+            }
+            if (mediaStreamTrack.kind === 'audio' && mediaConstraints.audio !== undefined) {
+                mediaStreamTrack.enabled = mediaConstraints.audio;
+            }
+        });
     }
 }
 
@@ -51,12 +67,21 @@ function connection(stream) {
         remoteVideo.srcObject = stream
         remoteVideo.play()
         remoteStream = stream;
-        applyOptions();
+        applyLocalOptions();
+        applyRemoteOptions(stream, mediaConstraints);
     });
 
     peer.on('data', data => {
         appendMessageHtml(data, 'candidate-chat-message');
     });
+
+    window.onbeforeunload = () => {
+        peer.destroy();
+    }
+
+    peer.on('error', () => {
+        window.history.back();
+    })
 
     sendMessage.addEventListener('click', () => {
         appendMessageHtml(messageInput.value, 'my-chat-message')
@@ -84,14 +109,8 @@ socket.on('connected_to_room', data => {
 })
 
 socket.on('media-constraints', data => {
-    remoteStream.getTracks().forEach((mediaStreamTrack) => {
-        if (mediaStreamTrack.kind === 'video' && data.video !== undefined) {
-            mediaStreamTrack.enabled = data.video;
-        }
-        if (mediaStreamTrack.kind === 'audio' && data.audio !== undefined) {
-            mediaStreamTrack.enabled = data.audio;
-        }
-    });
+    mediaConstraints = data;
+    applyRemoteOptions(remoteStream, mediaConstraints);
 });
 
 socket.emit('room', getParameter('id'));

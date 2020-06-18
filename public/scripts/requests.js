@@ -56,8 +56,8 @@ function navigateTo(url) {
     window.location = url;
 }
 
-function setActivityStatus(user) {
-    user.isActive = !user.isActive;
+function setActivityStatus(user, isActive) {
+    user.isActive = isActive;
     postData(API_STATUS_URL, user)
 }
 

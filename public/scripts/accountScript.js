@@ -11,7 +11,7 @@ let options = {
 
 window.onbeforeunload = () => {
     socket.emit('on-user-remove', currentUser._id);
-    setActivityStatus(currentUser);
+    setActivityStatus(currentUser, false);
     sessionStorage.setItem('local_options', JSON.stringify(options));
 }
 
@@ -20,7 +20,7 @@ function init() {
     postData(API_SELECT_URL, {_id: uID})
         .then(res => {
             currentUser = res[0];
-            setActivityStatus(currentUser)
+            setActivityStatus(currentUser, true)
             socket.emit('on-user-added', currentUser);
         });
     getData(API_URL)
@@ -37,22 +37,32 @@ socket.on('offer', function (user) {
         const roomUrl = generateUrl('room', 'id', new Date().getTime());
         socket.emit('send_confirmed_offer', {senderID: user.senderID, url: roomUrl.href})
         navigateTo(roomUrl);
+    });
+
+    document.getElementById('dismissOffer').addEventListener('click', () => {
+        socket.emit('send_rejected_offer', {senderID: user.senderID, name: user.name})
     })
 })
 
 socket.on('confirmed_offer', function (url) {
     navigateTo(url + '#init');
-})
+});
+
+socket.on('rejected_offer', function (userName) {
+    $('#rejectedModal').modal('show');
+    document.getElementById('rejectedModalBody').innerHTML = `${userName} has rejected your offer`
+    isShouldDisableButton(false);
+});
 
 socket.on('add-active-user', function (user) {
     users.push(user);
     show(users);
-})
+});
 
 socket.on('remove-user', function (userID) {
     users = users.filter(user => user._id !== userID);
     show(users);
-})
+});
 
 turnOnOfVideo.onclick = function () {
     update(turnOnOfVideoImage, {
@@ -86,8 +96,16 @@ function addUser(user) {
     el.getElementsByTagName('p')[0].innerHTML = user.name;
     el.getElementsByTagName('button')[0].addEventListener('click', () => {
         socket.emit('send_offer', {name: currentUser.name, senderID: currentUser._id, remoteID: user._id});
+        isShouldDisableButton(true);
     })
     listContainer.appendChild(el);
+}
+
+function isShouldDisableButton(isShould) {
+    let items = document.getElementsByClassName('btn btn-success');
+    for (let i = 0; i < items.length; i++) {
+        items[i].disabled = isShould;
+    }
 }
 
 function show(users) {
